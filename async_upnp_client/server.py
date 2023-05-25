@@ -50,6 +50,7 @@ from async_upnp_client.client import (
 )
 from async_upnp_client.client_factory import UpnpFactory
 from async_upnp_client.const import (
+    STATE_VARIABLE_TYPE_MAPPING,
     ActionArgumentInfo,
     ActionInfo,
     AddressTupleVXType,
@@ -58,6 +59,7 @@ from async_upnp_client.const import (
     ServiceInfo,
     StateVariableInfo,
     StateVariableTypeInfo,
+    TemplateStateVariableTypeInfo,
 )
 from async_upnp_client.exceptions import (
     UpnpActionError,
@@ -945,6 +947,24 @@ async def to_xml(
     encoding = "utf-8"
     thing_xml = ET.tostring(thing_el, encoding=encoding)
     return Response(content_type="text/xml", charset=encoding, body=thing_xml)
+
+
+def create_template_var(
+    data_type: str,
+    *,
+    allowed: Optional[List[str]] = None,
+    allowed_range: Optional[Mapping[str, Optional[str]]] = None,
+    default: Optional[str] = None,
+) -> StateVariableTypeInfo:
+    """Create template state variables."""
+    return TemplateStateVariableTypeInfo(
+        data_type=data_type,
+        data_type_mapping=STATE_VARIABLE_TYPE_MAPPING[data_type],
+        default_value=default,
+        allowed_value_range=allowed_range or {},
+        allowed_values=allowed,
+        xml=ET.Element("server_stateVariable"),
+    )
 
 
 class UpnpServer:
