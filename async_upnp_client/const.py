@@ -176,6 +176,11 @@ class EventableStateVariableTypeInfo(StateVariableTypeInfo):
 
 
 @dataclass(frozen=True)
+class TemplateStateVariableTypeInfo(StateVariableTypeInfo):
+    """Eventable State variable type info."""
+
+
+@dataclass(frozen=True)
 class StateVariableInfo:
     """State variable info."""
 

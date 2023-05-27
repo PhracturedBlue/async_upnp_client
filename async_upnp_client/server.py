@@ -62,6 +62,7 @@ from async_upnp_client.const import (
     ServiceInfo,
     StateVariableInfo,
     StateVariableTypeInfo,
+    TemplateStateVariableTypeInfo,
 )
 from async_upnp_client.exceptions import (
     UpnpActionError,
@@ -1017,6 +1018,24 @@ def create_state_var(
 ) -> StateVariableTypeInfo:
     """Create state variables."""
     return StateVariableTypeInfo(
+        data_type=data_type,
+        data_type_mapping=STATE_VARIABLE_TYPE_MAPPING[data_type],
+        default_value=default,
+        allowed_value_range=allowed_range or {},
+        allowed_values=allowed,
+        xml=ET.Element("server_stateVariable"),
+    )
+
+
+def create_template_var(
+    data_type: str,
+    *,
+    allowed: Optional[List[str]] = None,
+    allowed_range: Optional[Mapping[str, Optional[str]]] = None,
+    default: Optional[str] = None,
+) -> StateVariableTypeInfo:
+    """Create template state variables."""
+    return TemplateStateVariableTypeInfo(
         data_type=data_type,
         data_type_mapping=STATE_VARIABLE_TYPE_MAPPING[data_type],
         default_value=default,
